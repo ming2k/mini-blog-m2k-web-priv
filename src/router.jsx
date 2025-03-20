@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 import ErrorBoundary from './components/ErrorBoundary';
 import RootLayout from './components/RootLayout';
@@ -6,6 +6,10 @@ import RootLayout from './components/RootLayout';
 // Lazy load components
 const Post = lazy(() => import('./pages/Post'));
 const Home = lazy(() => import('./pages/Home'));
+const Login = lazy(() => import('./pages/Login'));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const EditPost = lazy(() => import('./pages/EditPost'));
+const NewPost = lazy(() => import('./pages/NewPost'));
 
 // Loading fallback
 const LoadingFallback = () => (
@@ -18,6 +22,15 @@ const LoadingFallback = () => (
     Loading...
   </div>
 );
+
+// Protected Route wrapper
+const ProtectedRoute = ({ children }) => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+};
 
 export const router = createBrowserRouter([
   {
@@ -41,5 +54,43 @@ export const router = createBrowserRouter([
         ),
       },
     ],
+  },
+  {
+    path: '/login',
+    element: (
+      <Suspense fallback={<LoadingFallback />}>
+        <Login />
+      </Suspense>
+    ),
+  },
+  {
+    path: '/dashboard',
+    element: (
+      <ProtectedRoute>
+        <Suspense fallback={<LoadingFallback />}>
+          <Dashboard />
+        </Suspense>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/dashboard/edit/:id',
+    element: (
+      <ProtectedRoute>
+        <Suspense fallback={<LoadingFallback />}>
+          <EditPost />
+        </Suspense>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/dashboard/new',
+    element: (
+      <ProtectedRoute>
+        <Suspense fallback={<LoadingFallback />}>
+          <NewPost />
+        </Suspense>
+      </ProtectedRoute>
+    ),
   },
 ]); 

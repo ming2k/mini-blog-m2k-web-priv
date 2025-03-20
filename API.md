@@ -96,6 +96,7 @@ GET /api/posts?page={page}&per_page={per_page}
 ```
 
 #### Get Single Post
+
 ```http
 GET /api/posts/{id}
 ```
@@ -116,5 +117,78 @@ GET /api/posts/{id}
 ```
 
 **Error Responses:**
+- 404 Not Found: Post with the specified ID does not exist
+- 500 Internal Server Error: Database error
+
+
+#### Create Post
+```http
+POST /api/posts
+Content-Type: application/json
+Authorization: Bearer <your_token>
+
+{
+    "title": "string",
+    "content": "string"
+}
+```
+
+**Parameters:**
+- `title` (required): Title of the post
+- `content` (required): Content of the post
+
+**Response (201 Created)**
+```json
+{
+    "id": "string",
+    "title": "string",
+    "content": "string",
+    "created_at": "timestamp",
+    "updated_at": "timestamp",
+    "author_id": "string"
+}
+```
+
+**Error Responses:**
+- 400 Bad Request: Invalid request body
+- 401 Unauthorized: Missing or invalid token
+- 500 Internal Server Error: Database error
+
+#### Update Entire Post
+
+```http
+POST /api/posts/{id}
+Content-Type: application/json
+Authorization: Bearer <your_token>
+
+{
+    "title": "string",  // Optional - omit to keep the current title
+    "content": "string" // Optional - omit to keep the current content
+}
+```
+
+**Parameters:**
+- `id` (required): Numeric ID of the post to update
+
+**Request Body:**
+- Only include fields you want to update. Omitted fields will remain unchanged.
+- At least one of `title` or `content` must be provided.
+
+**Response (200 OK)**
+```json
+{
+    "id": 1,
+    "title": "string",
+    "content": "string",
+    "created_at": "timestamp",
+    "updated_at": "timestamp",
+    "author_id": "string"
+}
+```
+
+**Error Responses:**
+- 400 Bad Request: Invalid request body
+- 401 Unauthorized: Missing or invalid token
+- 403 Forbidden: User is not the author of the post
 - 404 Not Found: Post with the specified ID does not exist
 - 500 Internal Server Error: Database error
