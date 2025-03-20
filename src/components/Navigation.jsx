@@ -1,8 +1,6 @@
 import { Link } from 'react-router-dom';
-// Remove icon imports since we won't be using them
-// import { FaHome, FaUser, FaSearch, FaNewspaper, FaArchive, FaTags } from 'react-icons/fa';
 
-const Navbar = () => {
+export default function Navigation() {
   return (
     <nav className="navbar slim">
       <div className="navbar-brand">
@@ -14,6 +12,4 @@ const Navbar = () => {
       </div>
     </nav>
   );
-};
-
-export default Navbar; 
+} 
