@@ -173,10 +173,9 @@ Authorization: Bearer <your_token>
 - 401 Unauthorized: Missing or invalid token
 - 500 Internal Server Error: Database error
 
-#### Update Entire Post
-
+#### Update Post
 ```http
-POST /api/posts/{id}
+PUT /api/posts/{id}
 Content-Type: application/json
 Authorization: Bearer <your_token>
 
@@ -207,6 +206,28 @@ Authorization: Bearer <your_token>
 
 **Error Responses:**
 - 400 Bad Request: Invalid request body
+- 401 Unauthorized: Missing or invalid token
+- 403 Forbidden: User is not the author of the post
+- 404 Not Found: Post with the specified ID does not exist
+- 500 Internal Server Error: Database error
+
+#### Delete Post
+```http
+DELETE /api/posts/{id}
+Authorization: Bearer <your_token>
+```
+
+**Parameters:**
+- `id` (required): Numeric ID of the post to delete
+
+**Response (200 OK)**
+```json
+{
+    "message": "Post deleted successfully"
+}
+```
+
+**Error Responses:**
 - 401 Unauthorized: Missing or invalid token
 - 403 Forbidden: User is not the author of the post
 - 404 Not Found: Post with the specified ID does not exist
@@ -247,3 +268,122 @@ GET /api/posts/search?q={search_term}&page={page}&per_page={per_page}
 **Error Responses:**
 - 400 Bad Request: Missing search query
 - 500 Internal Server Error: Database error
+
+### Request Tracking
+
+All API requests are automatically logged with the following information:
+- Request path
+- HTTP method
+- IP address
+- Referer header (if available)
+- User agent
+- User ID (for authenticated requests)
+- Status code
+- Timestamp
+
+This information is stored in the database and can be accessed through the analytics endpoints by administrators.
+
+### Analytics & Logging
+
+#### Get Request Logs
+
+```http
+GET /api/logs
+Authorization: Bearer <your_token>
+```
+
+**Query Parameters:**
+- `page` (optional): Page number, defaults to 1
+- `per_page` (optional): Number of logs per page, defaults to 20
+- `path` (optional): Filter logs by request path
+- `method` (optional): Filter logs by HTTP method
+- `ip_address` (optional): Filter logs by IP address
+- `user_id` (optional): Filter logs by user ID
+- `from_date` (optional): Filter logs from this date (ISO 8601 format)
+- `to_date` (optional): Filter logs until this date (ISO 8601 format)
+
+**Response (200 OK)**
+```json
+{
+    "logs": [
+        {
+            "id": "number",
+            "path": "string",
+            "method": "string",
+            "ip_address": "string",
+            "referer": "string | null",
+            "user_id": "string | null",
+            "user_agent": "string | null",
+            "status_code": "number",
+            "timestamp": "number"
+        }
+    ],
+    "pagination": {
+        "current_page": "number",
+        "per_page": "number",
+        "total_logs": "number",
+        "total_pages": "number"
+    }
+}
+```
+
+**Error Responses:**
+- 401 Unauthorized: Missing or invalid token
+- 403 Forbidden: User does not have admin privileges
+- 500 Internal Server Error: Database error
+
+**Note:** This endpoint is restricted to admin users only. Regular users will receive a 403 Forbidden response.
+
+#### Get Visit Statistics
+```http
+GET /api/stats/visits
+Authorization: Bearer <your_token>
+```
+
+**Response (200 OK)**
+```json
+{
+    "total_unique_visitors": "number",
+    "visits": [
+        {
+            "ip_address": "string",
+            "visit_count": "number",
+            "last_visit": "number"
+        }
+    ]
+}
+```
+
+**Note:** This endpoint counts unique visitors to the frontend, with visits from the same IP within 30 minutes counted as a single visit.
+
+#### Get Visit Statistics (Last 24h, Excluding IPs)
+```http
+GET /api/stats/visits/24h?exclude_ips=127.0.0.1,192.168.1.1
+Authorization: Bearer <your_token>
+```
+
+**Query Parameters:**
+- `exclude_ips` (required): Comma-separated list of IP addresses to exclude from statistics
+
+**Response (200 OK)**
+```json
+{
+    "total_unique_visitors": "number",
+    "total_visits": "number",
+    "excluded_ips": ["string"],
+    "visits": [
+        {
+            "ip_address": "string",
+            "visit_count": "number",
+            "last_visit": "number"
+        }
+    ]
+}
+```
+
+**Error Responses:**
+- 401 Unauthorized: Missing or invalid token
+- 403 Forbidden: User does not have admin privileges
+- 500 Internal Server Error: Database error
+
+**Note:** Both visit statistics endpoints are restricted to admin users only.

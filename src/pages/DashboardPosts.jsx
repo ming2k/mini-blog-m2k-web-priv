@@ -1,5 +1,6 @@
 import React, { Suspense, useState, useEffect } from 'react';
 import { FaEdit, FaTrash, FaPlus, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { getPosts, searchPosts, savePost, deletePost } from '../api';
 import styles from './DashboardPosts.module.css';
 import PostEditor from '../components/PostEditor';
 import { formatDate } from '../utils/dateFormat';
@@ -20,7 +21,7 @@ export default function DashboardPosts() {
 
   useEffect(() => {
     if (searchMode && searchTerm) {
-      searchPosts();
+      fetchSearchResults();
     } else {
       fetchPosts();
     }
@@ -28,8 +29,7 @@ export default function DashboardPosts() {
 
   const fetchPosts = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/api/posts?page=${page}&per_page=4`);
-      const data = await response.json();
+      const data = await getPosts(page, 4);
       setPosts(data.posts);
       setPagination(data.pagination);
     } catch (error) {
@@ -37,12 +37,9 @@ export default function DashboardPosts() {
     }
   };
 
-  const searchPosts = async () => {
+  const fetchSearchResults = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:8080/api/posts/search?q=${encodeURIComponent(searchTerm)}&page=${page}&per_page=4`
-      );
-      const data = await response.json();
+      const data = await searchPosts(searchTerm, page, 4);
       setPosts(data.posts);
       setPagination(data.pagination);
     } catch (error) {
@@ -52,26 +49,34 @@ export default function DashboardPosts() {
 
   const handleSavePost = async (postData) => {
     try {
-      const url = postData.id 
-        ? `http://localhost:8080/api/posts/${postData.id}`
-        : 'http://localhost:8080/api/posts';
-        
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify(postData)
-      });
+      await savePost(postData);
+      setIsEditing(false);
+      setCurrentPost(null);
       
-      if (response.ok) {
-        setIsEditing(false);
-        setCurrentPost(null);
+      if (searchMode && searchTerm) {
+        fetchSearchResults();
+      } else {
         fetchPosts();
       }
     } catch (error) {
       console.error('Error saving post:', error);
+    }
+  };
+
+  const handleDeletePost = async (postId) => {
+    if (!window.confirm('Are you sure you want to delete this post?')) {
+      return;
+    }
+
+    try {
+      await deletePost(postId);
+      if (searchMode && searchTerm) {
+        fetchSearchResults();
+      } else {
+        fetchPosts();
+      }
+    } catch (error) {
+      console.error('Error deleting post:', error);
     }
   };
 
@@ -98,19 +103,23 @@ export default function DashboardPosts() {
     <Suspense fallback={<LoadingSpinner />}>
       <div className={styles.dashboard}>
         <header className={styles.dashboard__header}>
-          <div className={styles.dashboard__title}>
-            <h1>Manage Posts</h1>
-            <SearchBar onSearch={handleSearch} />
+          <div className={styles.dashboard__main}>
+            <div className={styles.dashboard__controls}>
+              <SearchBar 
+                onSearch={handleSearch} 
+                placeholder="Search posts..."
+              />
+              <button 
+                className={styles.dashboard__action}
+                onClick={() => {
+                  setIsEditing(true);
+                  setCurrentPost(null);
+                }}
+              >
+                <FaPlus /> <span>New Post</span>
+              </button>
+            </div>
           </div>
-          <button 
-            className={styles.dashboard__action}
-            onClick={() => {
-              setIsEditing(true);
-              setCurrentPost(null);
-            }}
-          >
-            <FaPlus /> New Post
-          </button>
         </header>
 
         <div className={styles.posts}>
@@ -123,33 +132,46 @@ export default function DashboardPosts() {
                       <h3 className={styles.posts__title}>{post.title}</h3>
                       <p className={styles.posts__preview}>{post.content_preview}</p>
                     </div>
-                    <div className={styles.posts__footer}>
+                    <footer className={styles.posts__footer}>
                       <div className={styles.posts__meta}>
-                        {formatDate(post.created_at, 'short')}
+                        <time dateTime={post.created_at}>
+                          {formatDate(post.created_at, 'short')}
+                        </time>
                       </div>
                       <div className={styles.posts__actions}>
                         <button 
                           className={`${styles.posts__button} ${styles['posts__button--edit']}`}
-                          onClick={() => {
+                          onClick={(e) => {
+                            e.preventDefault();
                             setCurrentPost(post);
                             setIsEditing(true);
                           }}
+                          title="Edit post"
                         >
-                          <FaEdit /> Edit
+                          <FaEdit />
+                          <span>Edit</span>
                         </button>
-                        <button className={`${styles.posts__button} ${styles['posts__button--delete']}`}>
-                          <FaTrash /> Delete
+                        <button 
+                          className={`${styles.posts__button} ${styles['posts__button--delete']}`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleDeletePost(post.id);
+                          }}
+                          title="Delete post"
+                        >
+                          <FaTrash />
+                          <span>Delete</span>
                         </button>
                       </div>
-                    </div>
+                    </footer>
                   </div>
                 </article>
               ))}
             </div>
           </div>
 
-          {pagination && (
-            <div className={styles.pagination}>
+          {pagination && pagination.total_pages > 1 && (
+            <footer className={styles.pagination}>
               <button 
                 className={styles.pagination__button}
                 disabled={page === 1}
@@ -159,7 +181,7 @@ export default function DashboardPosts() {
                 <FaChevronLeft />
               </button>
               <span className={styles.pagination__info}>
-                Page {page} of {pagination.total_pages}
+                {page} / {pagination.total_pages}
               </span>
               <button 
                 className={styles.pagination__button}
@@ -169,7 +191,7 @@ export default function DashboardPosts() {
               >
                 <FaChevronRight />
               </button>
-            </div>
+            </footer>
           )}
         </div>
       </div>

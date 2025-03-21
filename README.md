@@ -83,3 +83,28 @@ Display equations:
 css use BEM
 
 BEM (Block Element Modifier)
+
+## Deployment
+
+### Development
+```bash
+npm run dev
+```
+
+### Production
+1. Build the application:
+```bash
+npm run build
+```
+
+2. Configure your web server (e.g., Nginx) with the provided configuration.
+
+3. Deploy the built files from the `dist` directory to your web server.
+
+### Proxy Configuration
+The application uses a reverse proxy to handle API requests:
+
+- Development: Vite's built-in proxy (configured in `vite.config.js`)
+- Production: Web server proxy (e.g., Nginx configuration provided)
+
+All API requests are proxied through `/api` to avoid CORS issues and provide better security.

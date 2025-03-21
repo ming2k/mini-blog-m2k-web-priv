@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaEdit, FaTrash, FaPlus, FaUser } from 'react-icons/fa';
-import { getPosts, deletePost } from '../api';
+import { getPosts, deletePost, getCurrentUser } from '../api';
 import styles from './Dashboard.module.css';
 import { formatShortDate } from '../utils/dateFormat';
 
@@ -24,20 +24,13 @@ export default function Dashboard() {
 
   const fetchUserAndPosts = async () => {
     try {
-      // Fetch user profile
-      const userResponse = await fetch('http://localhost:8080/api/users/me', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
+      const [userData, postsData] = await Promise.all([
+        getCurrentUser(),
+        getPosts()
+      ]);
       
-      if (!userResponse.ok) throw new Error('Failed to fetch user profile');
-      const userData = await userResponse.json();
       setUser(userData);
-
-      // Fetch posts
-      const data = await getPosts();
-      setPosts(data.posts);
+      setPosts(postsData.posts);
     } catch (err) {
       setError(err.message);
     } finally {

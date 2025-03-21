@@ -3,7 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import ProfileImage from '../components/ProfileImage';
 import usePerformanceMonitor from '../hooks/usePerformanceMonitor';
 import { formatShortDate } from '../utils/dateFormat';
-import { getPosts } from '../api';
+import { getPosts, searchPosts } from '../api';
 // Import icons from React Icons
 import { FaGithub, FaEnvelope, FaLinkedin, FaCalendarAlt, FaUser, FaChevronLeft, FaChevronRight, FaChevronUp, FaChevronDown } from 'react-icons/fa';
 import { FaBilibili, FaXTwitter } from "react-icons/fa6";
@@ -39,14 +39,9 @@ const Home = () => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        let result;
-        if (searchMode && searchTerm) {
-          result = await fetch(
-            `http://localhost:8080/api/posts/search?q=${encodeURIComponent(searchTerm)}&page=${currentPage}&per_page=5`
-          ).then(res => res.json());
-        } else {
-          result = await getPosts(currentPage, 5);
-        }
+        const result = searchMode && searchTerm
+          ? await searchPosts(searchTerm, currentPage, 5)
+          : await getPosts(currentPage, 5);
         setData(result);
       } catch (err) {
         setError(err.message);

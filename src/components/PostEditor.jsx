@@ -1,18 +1,16 @@
 import React, { useEffect } from 'react';
 import MDEditor from '@uiw/react-md-editor';
+import { getPostById } from '../api';
 import styles from './PostEditor.module.css';
 
 export default function PostEditor({ post, onSave, onCancel }) {
   const [currentPost, setCurrentPost] = React.useState({ title: '', content: '' });
 
-  // Use useEffect to update currentPost when post prop changes
   useEffect(() => {
     if (post) {
-      // Fetch the full post content if we're editing an existing post
       const fetchFullPost = async () => {
         try {
-          const response = await fetch(`http://localhost:8080/api/posts/${post.id}`);
-          const fullPost = await response.json();
+          const fullPost = await getPostById(post.id);
           setCurrentPost({
             id: fullPost.id,
             title: fullPost.title,
@@ -25,7 +23,6 @@ export default function PostEditor({ post, onSave, onCancel }) {
 
       fetchFullPost();
     } else {
-      // Reset form for new post
       setCurrentPost({ title: '', content: '' });
     }
   }, [post]);
