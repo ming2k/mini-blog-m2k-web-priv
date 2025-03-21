@@ -1,14 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaEdit, FaTrash, FaPlus, FaEye } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaPlus, FaEye, FaUser, FaArrowLeft } from 'react-icons/fa';
 import { getPosts, deletePost } from '../api';
 import styles from './Dashboard.module.css';
 import { formatShortDate } from '../utils/dateFormat';
+import Account from './Account';
 
 export default function Dashboard() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showAccount, setShowAccount] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -40,16 +42,44 @@ export default function Dashboard() {
   if (loading) return <div className={styles.loading}>Loading posts...</div>;
   if (error) return <div className={styles.error}>{error}</div>;
 
+  if (showAccount) {
+    return (
+      <div className={styles.container}>
+        <header className={styles.header}>
+          <div className={styles.headerLeft}>
+            <button 
+              className={styles.backButton}
+              onClick={() => setShowAccount(false)}
+            >
+              <FaArrowLeft /> Back to Posts
+            </button>
+          </div>
+        </header>
+        <Account />
+      </div>
+    );
+  }
+
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <h1>Posts</h1>
-        <button 
-          className={styles.newButton}
-          onClick={() => navigate('/dashboard/editor')}
-        >
-          <FaPlus /> New Post
-        </button>
+        <div className={styles.headerLeft}>
+          <h1>Posts</h1>
+        </div>
+        <div className={styles.headerRight}>
+          <button 
+            className={styles.accountButton}
+            onClick={() => setShowAccount(true)}
+          >
+            <FaUser /> Account
+          </button>
+          <button 
+            className={styles.newButton}
+            onClick={() => navigate('/dashboard/editor')}
+          >
+            <FaPlus /> New Post
+          </button>
+        </div>
       </header>
 
       <div className={styles.postsGrid}>

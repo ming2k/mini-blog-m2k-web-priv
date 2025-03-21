@@ -37,7 +37,10 @@ Content-Type: application/json
 ```
 **Error Responses:**
 - 400 Bad Request: Username already exists
+- 403 Forbidden: Registration is closed (admin user already exists)
 - 500 Internal Server Error: Database or password hashing error
+
+**Note:** This endpoint only allows registration of a single admin user. Once an admin user exists, further registration attempts will be rejected with a 403 Forbidden response.
 
 #### Login
 ```http
@@ -80,6 +83,35 @@ Authorization: Bearer <your_token>
 **Error Responses:**
 - 401 Unauthorized: Missing or invalid token
 - 404 Not Found: User not found
+- 500 Internal Server Error: Database error
+
+#### Change Password
+```http
+POST /api/users/change-password
+Content-Type: application/json
+Authorization: Bearer <your_token>
+
+{
+    "current_password": "string",
+    "new_password": "string"
+}
+```
+
+**Requirements:**
+- Must be authenticated (valid token)
+- New password must be at least 6 characters long
+- Current password must be correct
+
+**Response (200 OK)**
+```json
+{
+    "message": "Password changed successfully"
+}
+```
+
+**Error Responses:**
+- 400 Bad Request: Invalid request body or new password too short
+- 401 Unauthorized: Missing token or incorrect current password
 - 500 Internal Server Error: Database error
 
 ### Blog Posts

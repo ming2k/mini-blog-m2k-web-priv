@@ -46,11 +46,15 @@ function DashboardLayout() {
               <FaFileAlt /> Posts
             </Link>
           </nav>
+
           <div className={styles.sidebarFooter}>
-            <div className={styles.userInfo}>
+            <button 
+              onClick={() => navigate('/dashboard/account')} 
+              className={`${styles.userInfo} ${location.pathname === '/dashboard/account' ? styles.active : ''}`}
+            >
               <FaUser className={styles.userIcon} />
               {user && <span>{user.username}</span>}
-            </div>
+            </button>
             <button onClick={handleLogout} className={styles.logoutButton}>
               <FaSignOutAlt /> Logout
             </button>

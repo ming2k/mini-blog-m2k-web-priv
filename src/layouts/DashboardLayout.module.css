@@ -63,6 +63,24 @@
   border-radius: 6px;
   color: #555;
   margin-bottom: 0.75rem;
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.userInfo:hover {
+  background: #eee;
+}
+
+.userInfo.active {
+  background: #555;
+  color: white;
+}
+
+.userInfo.active .userIcon {
+  color: white;
 }
 
 .userIcon {

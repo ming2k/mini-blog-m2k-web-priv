@@ -1,0 +1,187 @@
+.account {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.headerIcon {
+  font-size: 2rem;
+  color: #555;
+  padding: 1rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.header h1 {
+  color: #555;
+  font-size: 1.75rem;
+  font-weight: 600;
+  font-family: var(--header-font);
+  margin: 0;
+}
+
+.container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.section {
+  padding: 2rem;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.sectionIcon {
+  color: #555;
+  font-size: 1.25rem;
+}
+
+.sectionHeader h2 {
+  color: #555;
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.form {
+  max-width: 400px;
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 1rem;
+  color: #555;
+  font-size: 1rem;
+  opacity: 0.6;
+}
+
+.input {
+  width: 100%;
+  padding: 0.75rem;
+  padding-left: 2.75rem;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  color: #555;
+  background: #f8f9fa;
+}
+
+.input:focus {
+  outline: none;
+  background: white;
+  border-color: #555;
+  box-shadow: 0 0 0 2px rgba(85, 85, 85, 0.1);
+}
+
+.input::placeholder {
+  color: #999;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 0.75rem;
+  background: #555;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.submitButton:hover:not(:disabled) {
+  background: #444;
+  transform: translateY(-1px);
+}
+
+.submitButton:disabled {
+  background: #999;
+  cursor: not-allowed;
+}
+
+.error {
+  background-color: #fff2f2;
+  color: #e74c3c;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.success {
+  background-color: #f0fff4;
+  color: #38a169;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .account {
+    padding: 1rem;
+  }
+  
+  .container {
+    border-radius: 8px;
+  }
+  
+  .section {
+    padding: 1.5rem;
+  }
+  
+  .header {
+    margin-bottom: 1.5rem;
+  }
+  
+  .header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .headerIcon {
+    font-size: 1.5rem;
+    padding: 0.75rem;
+  }
+}

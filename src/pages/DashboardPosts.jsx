@@ -105,10 +105,13 @@ export default function DashboardPosts() {
         <header className={styles.dashboard__header}>
           <div className={styles.dashboard__main}>
             <div className={styles.dashboard__controls}>
-              <SearchBar 
-                onSearch={handleSearch} 
-                placeholder="Search posts..."
-              />
+              <div className={styles.dashboard__search}>
+                <SearchBar 
+                  onSearch={handleSearch} 
+                  placeholder="Type to search..."
+                  className={styles.searchBar}
+                />
+              </div>
               <button 
                 className={styles.dashboard__action}
                 onClick={() => {

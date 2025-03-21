@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import styles from './Register.module.css';
+import { FaUser, FaLock } from 'react-icons/fa';
 
 function Register() {
   const navigate = useNavigate();
@@ -10,6 +11,7 @@ function Register() {
     confirmPassword: ''
   });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,8 +21,14 @@ function Register() {
       return;
     }
 
+    if (formData.password.length < 6) {
+      setError('Password must be at least 6 characters long');
+      return;
+    }
+
+    setLoading(true);
     try {
-      const response = await fetch('/api/auth/register', {
+      const response = await fetch('/api/users/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -32,12 +40,23 @@ function Register() {
       });
 
       if (!response.ok) {
-        throw new Error('Registration failed');
+        const data = await response.json();
+        if (response.status === 403) {
+          throw new Error('Registration is closed. Admin user already exists.');
+        } else if (response.status === 400) {
+          throw new Error('Username already exists');
+        } else {
+          throw new Error(data.message || 'Registration failed');
+        }
       }
 
-      navigate('/login');
+      const data = await response.json();
+      localStorage.setItem('token', data.token);
+      navigate('/dashboard');
     } catch (err) {
       setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -50,43 +69,73 @@ function Register() {
 
   return (
     <div className={styles.register}>
+      <h1 className={styles.title}>Create Account</h1>
+      
       <form className={styles.form} onSubmit={handleSubmit}>
-        <h1>Register</h1>
         {error && <div className={styles.error}>{error}</div>}
+        
         <div className={styles.formGroup}>
-          <label htmlFor="username">Username</label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            required
-          />
+          <div className={styles.inputWrapper}>
+            <FaUser className={styles.inputIcon} />
+            <input
+              type="text"
+              id="username"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              required
+              className={styles.input}
+              placeholder="Enter your username"
+              autoComplete="username"
+            />
+          </div>
         </div>
+
         <div className={styles.formGroup}>
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
+          <div className={styles.inputWrapper}>
+            <FaLock className={styles.inputIcon} />
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              className={styles.input}
+              placeholder="Enter your password"
+              autoComplete="new-password"
+            />
+          </div>
         </div>
+
         <div className={styles.formGroup}>
-          <label htmlFor="confirmPassword">Confirm Password</label>
-          <input
-            type="password"
-            id="confirmPassword"
-            name="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            required
-          />
+          <div className={styles.inputWrapper}>
+            <FaLock className={styles.inputIcon} />
+            <input
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              required
+              className={styles.input}
+              placeholder="Confirm your password"
+              autoComplete="new-password"
+            />
+          </div>
         </div>
-        <button type="submit">Register</button>
+
+        <button 
+          type="submit" 
+          className={styles.submitButton}
+          disabled={loading}
+        >
+          {loading ? 'Creating Account...' : 'Create Account'}
+        </button>
+
+        <div className={styles.footer}>
+          <p>Already have an account? <Link to="/login" className={styles.link}>Sign In</Link></p>
+        </div>
       </form>
     </div>
   );

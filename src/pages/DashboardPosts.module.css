@@ -29,8 +29,41 @@
 
 .dashboard__controls {
   display: flex;
-  gap: 1rem;
+  justify-content: space-between;
   align-items: center;
+  gap: 1.5rem;
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  border: 1px solid #eee;
+}
+
+.dashboard__search {
+  flex: 1;
+  max-width: 600px;
+}
+
+.searchBar {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  color: #555;
+  background: #f8f9fa;
+  transition: all 0.2s ease;
+}
+
+.searchBar:focus {
+  outline: none;
+  background: white;
+  border-color: #555;
+  box-shadow: 0 0 0 2px rgba(85, 85, 85, 0.1);
+}
+
+.searchBar::placeholder {
+  color: #999;
 }
 
 .dashboard__action {
@@ -38,18 +71,20 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.25rem;
-  background-color: var(--accent-color);
+  background-color: #555;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  font-weight: 500;
 }
 
 .dashboard__action:hover {
+  background-color: #444;
   transform: translateY(-1px);
-  background-color: var(--accent-color-dark, #444);
 }
 
 /* Block: posts */
@@ -232,7 +267,21 @@
 
   .dashboard__controls {
     flex-direction: column;
-    align-items: stretch;
+    padding: 0.75rem;
+    gap: 1rem;
+  }
+
+  .dashboard__search {
+    max-width: none;
+  }
+
+  .searchBar {
+    width: 100%;
+  }
+
+  .dashboard__action {
+    width: 100%;
+    justify-content: center;
   }
 
   .dashboard__title {

@@ -1,27 +1,26 @@
-import React from 'react';
+import { useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
 import styles from './SearchBar.module.css';
 
-export default function SearchBar({ onSearch, placeholder = 'Search posts...' }) {
-  const [searchTerm, setSearchTerm] = React.useState('');
+export default function SearchBar({ onSearch, placeholder, className }) {
+  const [value, setValue] = useState('');
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSearch(searchTerm);
+  const handleChange = (e) => {
+    const newValue = e.target.value;
+    setValue(newValue);
+    onSearch(newValue);
   };
 
   return (
-    <form className={styles.search} onSubmit={handleSubmit}>
+    <div className={styles.searchWrapper}>
+      <FaSearch className={styles.searchIcon} />
       <input
         type="text"
-        className={styles.search__input}
+        value={value}
+        onChange={handleChange}
         placeholder={placeholder}
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
+        className={`${styles.searchInput} ${className}`}
       />
-      <button type="submit" className={styles.search__button}>
-        <FaSearch />
-      </button>
-    </form>
+    </div>
   );
 } 

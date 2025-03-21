@@ -7,6 +7,7 @@ import DashboardLayout from './layouts/DashboardLayout';
 import DashboardHome from './pages/DashboardHome';
 import DashboardPosts from './pages/DashboardPosts';
 import DashboardSettings from './pages/DashboardSettings';
+import Account from './pages/Account';
 
 // Lazy load components - remove .jsx extensions
 const Post = lazy(() => import('./pages/Post'));
@@ -118,6 +119,10 @@ export const router = createBrowserRouter([
         element: <DashboardEditor />,
         errorElement: <ErrorBoundary />
       },
+      {
+        path: 'account',
+        element: <Account />
+      }
     ]
   },
   {
