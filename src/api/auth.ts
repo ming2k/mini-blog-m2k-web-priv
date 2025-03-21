@@ -18,14 +18,19 @@ export interface User {
   username: string;
 }
 
-export async function login(credentials: LoginCredentials): Promise<AuthResponse> {
-  const response = await fetch(`${API_BASE_URL}/api/users/login`, {
+export async function login(username: string, password: string): Promise<{ token: string }> {
+  const response = await fetch(`${API_BASE_URL}/users/login`, {
     method: 'POST',
-    headers,
-    body: JSON.stringify(credentials),
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ username, password })
   });
-  
-  if (!response.ok) throw new Error('Invalid credentials');
+
+  if (!response.ok) {
+    throw new Error('Login failed');
+  }
+
   return response.json();
 }
 
@@ -44,9 +49,9 @@ export async function getCurrentUser(): Promise<User> {
   const response = await fetch(`${API_BASE_URL}/users/me`, {
     headers: authHeaders(localStorage.getItem('token') || '')
   });
-  
+
   if (!response.ok) {
-    throw new Error('Failed to fetch user profile');
+    throw new Error('Failed to fetch user data');
   }
 
   return response.json();

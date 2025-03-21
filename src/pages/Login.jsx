@@ -1,52 +1,84 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { login } from '../api';
+import { useNavigate, Link } from 'react-router-dom';
+import { login } from '../api/auth';
 import styles from './Login.module.css';
+import { FaUser, FaLock } from 'react-icons/fa';
 
 export default function Login() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    username: '',
+    password: ''
+  });
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
+    setLoading(true);
+    setError('');
+
     try {
-      const data = await login({ username, password });
-      localStorage.setItem('token', data.token);
+      const { token } = await login(formData.username, formData.password);
+      localStorage.setItem('token', token);
       navigate('/dashboard');
     } catch (err) {
-      setError(err.message);
+      setError('Invalid username or password');
+    } finally {
+      setLoading(false);
     }
-  };
+  }
 
   return (
-    <div className={styles.loginContainer}>
-      <form onSubmit={handleSubmit} className={styles.loginForm}>
-        <h2>Admin Login</h2>
-        {error && <div className={styles.error}>{error}</div>}
+    <div className={styles.login}>
+      <h1 className={styles.title}>Welcome Back</h1>
+      {error && <div className={styles.error}>{error}</div>}
+      
+      <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.formGroup}>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Username"
-            required
-          />
+          <div className={styles.inputWrapper}>
+            <FaUser className={styles.inputIcon} />
+            <input
+              id="username"
+              type="text"
+              placeholder="Username"
+              value={formData.username}
+              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+              required
+              autoComplete="username"
+              className={styles.input}
+            />
+          </div>
         </div>
+
         <div className={styles.formGroup}>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-            required
-          />
+          <div className={styles.inputWrapper}>
+            <FaLock className={styles.inputIcon} />
+            <input
+              id="password"
+              type="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              required
+              autoComplete="current-password"
+              className={styles.input}
+            />
+          </div>
         </div>
-        <button type="submit" className={styles.submitButton}>
-          Login
+
+        <button 
+          type="submit" 
+          className={styles.submitButton}
+          disabled={loading}
+        >
+          {loading ? 'Signing in...' : 'Sign In'}
         </button>
       </form>
+
+      <div className={styles.footer}>
+        <p>Don't have an account? <Link to="/register" className={styles.link}>Register</Link></p>
+      </div>
     </div>
   );
 } 

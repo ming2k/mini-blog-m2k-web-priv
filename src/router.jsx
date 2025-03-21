@@ -2,17 +2,21 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 import ErrorBoundary from './components/ErrorBoundary';
 import RootLayout from './layouts/RootLayout';
+import AuthLayout from './layouts/AuthLayout';
 import DashboardLayout from './layouts/DashboardLayout';
 import DashboardHome from './pages/DashboardHome';
 import DashboardPosts from './pages/DashboardPosts';
 import DashboardSettings from './pages/DashboardSettings';
 
-// Lazy load components
+// Lazy load components - remove .jsx extensions
 const Post = lazy(() => import('./pages/Post'));
 const Home = lazy(() => import('./pages/Home'));
-const Login = lazy(() => import('./pages/Login'));
+const Login = lazy(() => import('./pages/Login.jsx'));
 const EditPost = lazy(() => import('./pages/EditPost'));
 const NewPost = lazy(() => import('./pages/NewPost'));
+const Register = lazy(() => import('./pages/Register.jsx'));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const DashboardEditor = lazy(() => import('./pages/DashboardEditor.jsx'));
 
 // Loading fallback
 const LoadingFallback = () => (
@@ -59,16 +63,34 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: '/login',
-    element: (
-      <Suspense fallback={<LoadingFallback />}>
-        <Login />
-      </Suspense>
-    ),
+    element: <AuthLayout />,
+    errorElement: <ErrorBoundary />,
+    children: [
+      {
+        path: '/login',
+        element: (
+          <Suspense fallback={<LoadingFallback />}>
+            <Login />
+          </Suspense>
+        ),
+      },
+      {
+        path: '/register',
+        element: (
+          <Suspense fallback={<LoadingFallback />}>
+            <Register />
+          </Suspense>
+        ),
+      },
+    ],
   },
   {
     path: '/dashboard',
-    element: <DashboardLayout />,
+    element: (
+      <ProtectedRoute>
+        <DashboardLayout />
+      </ProtectedRoute>
+    ),
     errorElement: <ErrorBoundary />,
     children: [
       {
@@ -85,7 +107,17 @@ export const router = createBrowserRouter([
         path: 'settings',
         element: <DashboardSettings />,
         errorElement: <ErrorBoundary />
-      }
+      },
+      {
+        path: 'editor',
+        element: <DashboardEditor />,
+        errorElement: <ErrorBoundary />
+      },
+      {
+        path: 'editor/:id',
+        element: <DashboardEditor />,
+        errorElement: <ErrorBoundary />
+      },
     ]
   },
   {

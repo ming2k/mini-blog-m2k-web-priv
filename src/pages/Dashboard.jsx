@@ -1,36 +1,24 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaEdit, FaTrash, FaPlus, FaUser } from 'react-icons/fa';
-import { getPosts, deletePost, getCurrentUser } from '../api';
+import { FaEdit, FaTrash, FaPlus, FaEye } from 'react-icons/fa';
+import { getPosts, deletePost } from '../api';
 import styles from './Dashboard.module.css';
 import { formatShortDate } from '../utils/dateFormat';
 
 export default function Dashboard() {
   const [posts, setPosts] = useState([]);
-  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      navigate('/login');
-      return;
-    }
+    fetchPosts();
+  }, []);
 
-    fetchUserAndPosts();
-  }, [navigate]);
-
-  const fetchUserAndPosts = async () => {
+  const fetchPosts = async () => {
     try {
-      const [userData, postsData] = await Promise.all([
-        getCurrentUser(),
-        getPosts()
-      ]);
-      
-      setUser(userData);
-      setPosts(postsData.posts);
+      const response = await getPosts();
+      setPosts(response.posts);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -49,24 +37,16 @@ export default function Dashboard() {
     }
   };
 
-  if (loading) return <div className={styles.loading}>Loading...</div>;
+  if (loading) return <div className={styles.loading}>Loading posts...</div>;
   if (error) return <div className={styles.error}>{error}</div>;
 
   return (
-    <div className={styles.dashboard}>
+    <div className={styles.container}>
       <header className={styles.header}>
-        <div className={styles.headerContent}>
-          <h1>Dashboard</h1>
-          {user && (
-            <div className={styles.userInfo}>
-              <FaUser />
-              <span>{user.username}</span>
-            </div>
-          )}
-        </div>
+        <h1>Posts</h1>
         <button 
           className={styles.newButton}
-          onClick={() => navigate('/dashboard/new')}
+          onClick={() => navigate('/dashboard/editor')}
         >
           <FaPlus /> New Post
         </button>
@@ -74,36 +54,40 @@ export default function Dashboard() {
 
       <div className={styles.postsGrid}>
         {posts.map(post => (
-          <div key={post.id} className={styles.postCard}>
-            <h3>{post.title}</h3>
-            <p style={{
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-              margin: '0.5rem 0'
-            }}>
-              {post.content_preview}
-            </p>
-            <div className={styles.postMeta}>
-              <time dateTime={post.created_at}>
-                {formatShortDate(post.created_at)}
-              </time>
+          <article key={post.id} className={styles.postCard}>
+            <div className={styles.postContent}>
+              <h3 className={styles.postTitle}>{post.title}</h3>
+              <p className={styles.postPreview}>{post.content_preview}</p>
+              <div className={styles.postMeta}>
+                <time dateTime={post.created_at}>
+                  {formatShortDate(post.created_at)}
+                </time>
+              </div>
             </div>
             <div className={styles.postActions}>
               <button
-                onClick={() => navigate(`/dashboard/edit/${post.id}`)}
-                className={styles.editButton}
+                onClick={() => navigate(`/post/${post.id}`)}
+                className={`${styles.actionButton} ${styles.viewButton}`}
+                title="View post"
               >
-                <FaEdit /> Edit
+                <FaEye />
+              </button>
+              <button
+                onClick={() => navigate(`/dashboard/editor/${post.id}`)}
+                className={`${styles.actionButton} ${styles.editButton}`}
+                title="Edit post"
+              >
+                <FaEdit />
               </button>
               <button
                 onClick={() => handleDelete(post.id)}
-                className={styles.deleteButton}
+                className={`${styles.actionButton} ${styles.deleteButton}`}
+                title="Delete post"
               >
-                <FaTrash /> Delete
+                <FaTrash />
               </button>
             </div>
-          </div>
+          </article>
         ))}
       </div>
     </div>

@@ -1,7 +1,8 @@
-const isDev = import.meta.env.DEV;
+const isDev = process.env.NODE_ENV === 'development';
 
 // Ensure the base URL doesn't have trailing slash
-export const API_BASE_URL = (isDev ? '/api' : '').replace(/\/$/, '');
+// export const API_BASE_URL = (isDev ? '/api' : '').replace(/\/$/, '');
+export const API_BASE_URL = '/api';
 
 export const API_ENDPOINTS = {
   AUTH: {

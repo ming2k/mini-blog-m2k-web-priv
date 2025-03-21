@@ -108,3 +108,13 @@ The application uses a reverse proxy to handle API requests:
 - Production: Web server proxy (e.g., Nginx configuration provided)
 
 All API requests are proxied through `/api` to avoid CORS issues and provide better security.
+
+## Docker Nginx Env Test
+
+```sh
+# Build the Docker image
+podkman build -t mini-blog-m2k-web .
+
+# Run the container
+podman run -p 3000:3000 mini-blog-m2k-web
+```

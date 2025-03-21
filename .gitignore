@@ -98,3 +98,5 @@ stats.html
 *.pem 
 
 profile.jpg
+
+nginx.conf

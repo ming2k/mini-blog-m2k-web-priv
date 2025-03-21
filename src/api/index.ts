@@ -1,4 +1,7 @@
-export * from './auth';
 export * from './posts';
+export * from './config';
 export * from './stats';
-export { API_BASE_URL } from './config'; 
+export * from './auth';
+
+// Add an alias for getPost as getPostById for backward compatibility
+export { getPost as getPostById } from './posts'; 

@@ -102,7 +102,7 @@ export async function deletePost(id: string): Promise<void> {
   }
 }
 
-export async function getPostById(id: string): Promise<Post> {
+export async function getPost(id: string): Promise<Post> {
   const response = await fetch(`${API_BASE_URL}/posts/${id}`);
   
   if (!response.ok) {
