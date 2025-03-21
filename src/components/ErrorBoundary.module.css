@@ -1,8 +1,8 @@
 .errorContainer {
-  max-width: 600px;
-  margin: 4rem auto;
-  text-align: center;
   padding: 2rem;
+  text-align: center;
+  max-width: 600px;
+  margin: 2rem auto;
 }
 
 .errorDetails {
@@ -22,4 +22,18 @@
 
 .homeLink:hover {
   background-color: #34495e;
+}
+
+.retryButton {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.retryButton:hover {
+  opacity: 0.9;
 } 

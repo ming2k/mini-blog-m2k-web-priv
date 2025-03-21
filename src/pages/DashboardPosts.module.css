@@ -1,0 +1,251 @@
+/* Block: dashboard */
+.dashboard {
+  height: 100vh;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard__header {
+  height: 8vh;
+  min-height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+.dashboard__title {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.dashboard__title h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin: 0;
+}
+
+.dashboard__action {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.dashboard__action:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Block: posts */
+.posts {
+  height: 92vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.posts__container {
+  flex: 1;
+  min-height: 0; /* Important for scroll containment */
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.posts__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  max-width: 900px;
+  margin: 0 auto;
+  height: fit-content;
+}
+
+.posts__item {
+  height: 35vh;
+  min-height: 300px;
+  background: var(--card-background);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.posts__item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.posts__content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.posts__main {
+  padding: 1.5rem;
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.posts__title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin: 0 0 1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.posts__preview {
+  color: var(--accent-color);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin: 0;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.posts__footer {
+  height: 12vh;
+  min-height: 100px;
+  border-top: 1px solid var(--border-color);
+  background: var(--background-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.posts__meta {
+  padding: 0.75rem 1.5rem;
+  font-size: 0.75rem;
+  color: var(--accent-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.posts__actions {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  flex: 1;
+}
+
+.posts__button {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.posts__button--edit {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+.posts__button--delete {
+  background-color: #f44336;
+  color: white;
+}
+
+.posts__button:hover {
+  transform: translateY(-1px);
+  opacity: 0.9;
+}
+
+/* Block: pagination */
+.pagination {
+  height: 8vh;
+  min-height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  border-top: 1px solid var(--border-color);
+  background: var(--card-background);
+}
+
+.pagination__button {
+  background: none;
+  border: none;
+  color: var(--accent-color);
+  padding: 0.5rem;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: all 0.2s ease;
+}
+
+.pagination__button:hover:not(:disabled) {
+  opacity: 1;
+}
+
+.pagination__button:disabled {
+  cursor: not-allowed;
+  opacity: 0.3;
+}
+
+.pagination__info {
+  font-size: 0.875rem;
+  color: var(--accent-color);
+}
+
+/* Block: status */
+.status {
+  text-align: center;
+  padding: 2rem;
+}
+
+.status--loading {
+  color: var(--accent-color);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .dashboard {
+    padding: 1rem;
+  }
+
+  .dashboard__header {
+    height: auto;
+    min-height: 12vh;
+    padding: 1rem;
+  }
+
+  .posts {
+    height: 88vh;
+  }
+
+  .posts__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .posts__item {
+    height: 40vh;
+  }
+
+  .posts__footer {
+    height: 15vh;
+  }
+} 

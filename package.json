@@ -14,12 +14,18 @@
     "analyze": "vite build --mode analyze"
   },
   "dependencies": {
+    "@uiw/react-md-editor": "^4.0.5",
+    "katex": "^0.16.9",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.5.0",
+    "react-markdown": "^9.0.1",
+    "react-quill": "^2.0.0",
     "react-router-dom": "^6.16.0",
     "react-window": "^1.8.9",
-    "swr": "^2.2.2",
+    "rehype-katex": "^7.0.0",
+    "remark-gfm": "^4.0.0",
+    "remark-math": "^6.0.0",
     "web-vitals": "^3.4.0",
     "zustand": "^4.4.1"
   },

@@ -1,13 +1,16 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 import ErrorBoundary from './components/ErrorBoundary';
-import RootLayout from './components/RootLayout';
+import RootLayout from './layouts/RootLayout';
+import DashboardLayout from './layouts/DashboardLayout';
+import DashboardHome from './pages/DashboardHome';
+import DashboardPosts from './pages/DashboardPosts';
+import DashboardSettings from './pages/DashboardSettings';
 
 // Lazy load components
 const Post = lazy(() => import('./pages/Post'));
 const Home = lazy(() => import('./pages/Home'));
 const Login = lazy(() => import('./pages/Login'));
-const Dashboard = lazy(() => import('./pages/Dashboard'));
 const EditPost = lazy(() => import('./pages/EditPost'));
 const NewPost = lazy(() => import('./pages/NewPost'));
 
@@ -65,13 +68,25 @@ export const router = createBrowserRouter([
   },
   {
     path: '/dashboard',
-    element: (
-      <ProtectedRoute>
-        <Suspense fallback={<LoadingFallback />}>
-          <Dashboard />
-        </Suspense>
-      </ProtectedRoute>
-    ),
+    element: <DashboardLayout />,
+    errorElement: <ErrorBoundary />,
+    children: [
+      {
+        index: true,
+        element: <DashboardHome />,
+        errorElement: <ErrorBoundary />
+      },
+      {
+        path: 'posts',
+        element: <DashboardPosts />,
+        errorElement: <ErrorBoundary />
+      },
+      {
+        path: 'settings',
+        element: <DashboardSettings />,
+        errorElement: <ErrorBoundary />
+      }
+    ]
   },
   {
     path: '/dashboard/edit/:id',

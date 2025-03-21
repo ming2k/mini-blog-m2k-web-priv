@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { getPost, updatePost } from '../api';
 import styles from './EditPost.module.css';
 
 export default function EditPost() {
@@ -16,14 +17,7 @@ export default function EditPost() {
 
   const fetchPost = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/api/posts/${id}`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-
-      if (!response.ok) throw new Error('Failed to fetch post');
-      const data = await response.json();
+      const data = await getPost(id);
       setPost(data);
     } catch (err) {
       setError(err.message);
@@ -36,19 +30,7 @@ export default function EditPost() {
     e.preventDefault();
     setSaving(true);
     try {
-      const response = await fetch(`http://localhost:8080/api/posts/${id}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify({
-          title: post.title,
-          content: post.content
-        })
-      });
-
-      if (!response.ok) throw new Error('Failed to update post');
+      await updatePost(id, post);
       navigate('/dashboard');
     } catch (err) {
       setError(err.message);

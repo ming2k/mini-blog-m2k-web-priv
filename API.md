@@ -63,6 +63,25 @@ Content-Type: application/json
 - 401 Unauthorized: Invalid username or password
 - 500 Internal Server Error: Database or token generation error
 
+#### Get Current User Profile
+```http
+GET /api/users/me
+Authorization: Bearer <your_token>
+```
+
+**Response (200 OK)**
+```json
+{
+    "id": "string",
+    "username": "string"
+}
+```
+
+**Error Responses:**
+- 401 Unauthorized: Missing or invalid token
+- 404 Not Found: User not found
+- 500 Internal Server Error: Database error
+
 ### Blog Posts
 
 #### Get All Posts
@@ -191,4 +210,40 @@ Authorization: Bearer <your_token>
 - 401 Unauthorized: Missing or invalid token
 - 403 Forbidden: User is not the author of the post
 - 404 Not Found: Post with the specified ID does not exist
+- 500 Internal Server Error: Database error
+
+#### Search Posts
+```http
+GET /api/posts/search?q={search_term}&page={page}&per_page={per_page}
+```
+
+**Query Parameters:**
+- `q` (required): Search term to match against post titles and content
+- `page` (optional): Page number, defaults to 1
+- `per_page` (optional): Number of posts per page, defaults to 10
+
+**Response (200 OK)**
+```json
+{
+    "posts": [
+        {
+            "id": "string",
+            "title": "string",
+            "content": "string",
+            "created_at": "timestamp",
+            "updated_at": "timestamp",
+            "author_id": "string"
+        }
+    ],
+    "pagination": {
+        "current_page": 1,
+        "per_page": 10,
+        "total_posts": 20,
+        "total_pages": 2
+    }
+}
+```
+
+**Error Responses:**
+- 400 Bad Request: Missing search query
 - 500 Internal Server Error: Database error

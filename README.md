@@ -14,6 +14,8 @@ A high-performance React web application for blogging, built with modern best pr
 - 📋 Virtualized lists for handling large datasets
 - 🔄 Efficient state management with Zustand
 - 📡 Smart data fetching with SWR
+- 📝 Markdown support with GitHub Flavored Markdown
+- ➗ Mathematical equations with KaTeX
 
 ## Getting Started
 
@@ -54,3 +56,30 @@ A high-performance React web application for blogging, built with modern best pr
 - `npm run analyze` - Analyze the bundle size
 
 ## Project Structure 
+
+## Writing Posts
+
+Posts support Markdown syntax and mathematical equations:
+
+### Markdown Features
+- GitHub Flavored Markdown (GFM)
+- Tables
+- Task lists
+- Strikethrough
+- Autolinks
+- Code blocks with syntax highlighting
+
+### Mathematical Equations
+You can write mathematical equations using KaTeX syntax:
+
+Inline equations: `$E = mc^2$`
+Display equations:
+```math
+\sum_{n=1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6}
+``` 
+
+## Development
+
+css use BEM
+
+BEM (Block Element Modifier)

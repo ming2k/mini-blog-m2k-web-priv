@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { createPost } from '../api';
 import styles from './EditPost.module.css'; // Reuse the same styles
 
 export default function NewPost() {
@@ -12,19 +13,7 @@ export default function NewPost() {
     e.preventDefault();
     setSaving(true);
     try {
-      const response = await fetch('http://localhost:8080/api/posts', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify({
-          title: post.title,
-          content: post.content
-        })
-      });
-
-      if (!response.ok) throw new Error('Failed to create post');
+      await createPost(post);
       navigate('/dashboard');
     } catch (err) {
       setError(err.message);
