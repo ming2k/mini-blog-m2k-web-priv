@@ -21,7 +21,7 @@ export default function Login() {
     try {
       const { token } = await login(formData.username, formData.password);
       localStorage.setItem('token', token);
-      navigate('/dashboard');
+      navigate('/');
     } catch (err) {
       setError('Invalid username or password');
     } finally {

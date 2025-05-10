@@ -14,7 +14,7 @@ export default function NewPost() {
     setSaving(true);
     try {
       await createPost(post);
-      navigate('/dashboard');
+      navigate('/');
     } catch (err) {
       setError(err.message);
     } finally {

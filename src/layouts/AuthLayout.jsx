@@ -1,14 +1,7 @@
-import { Navigate } from 'react-router-dom';
-import styles from './AuthLayout.module.css';
 import { Outlet } from 'react-router-dom';
+import styles from './AuthLayout.module.css';
 
 function AuthLayout() {
-  const token = localStorage.getItem('token');
-  
-  if (token) {
-    return <Navigate to="/dashboard" replace />;
-  }
-
   return (
     <div className={styles.authLayout}>
       <div className={styles.container}>

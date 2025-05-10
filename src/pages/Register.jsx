@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import styles from './Register.module.css';
-import { FaUser, FaLock } from 'react-icons/fa';
+import { FaUser, FaLock, FaEnvelope } from 'react-icons/fa';
 
 function Register() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: '',
+    email: '',
     password: '',
     confirmPassword: ''
   });
@@ -26,6 +27,11 @@ function Register() {
       return;
     }
 
+    if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+      setError('Please enter a valid email address');
+      return;
+    }
+
     setLoading(true);
     try {
       const response = await fetch('/api/users/register', {
@@ -35,6 +41,7 @@ function Register() {
         },
         body: JSON.stringify({
           username: formData.username,
+          email: formData.email,
           password: formData.password,
         }),
       });
@@ -52,7 +59,7 @@ function Register() {
 
       const data = await response.json();
       localStorage.setItem('token', data.token);
-      navigate('/dashboard');
+      navigate('/');
     } catch (err) {
       setError(err.message);
     } finally {
@@ -87,6 +94,23 @@ function Register() {
               className={styles.input}
               placeholder="Enter your username"
               autoComplete="username"
+            />
+          </div>
+        </div>
+
+        <div className={styles.formGroup}>
+          <div className={styles.inputWrapper}>
+            <FaEnvelope className={styles.inputIcon} />
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              className={styles.input}
+              placeholder="Enter your email"
+              autoComplete="email"
             />
           </div>
         </div>

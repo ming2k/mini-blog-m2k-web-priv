@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { savePost, getPost } from '../api';
-import styles from './DashboardEditor.module.css';
+import { useParams, useNavigate } from 'react-router-dom';
+import { getPost, updatePost } from '../api';
+import styles from './Editor.module.css';
 
-function DashboardEditor() {
+export default function Editor() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [post, setPost] = useState({
@@ -29,6 +29,7 @@ function DashboardEditor() {
       });
     } catch (err) {
       setError('Failed to load post');
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -38,29 +39,25 @@ function DashboardEditor() {
     e.preventDefault();
     try {
       setLoading(true);
-      await savePost({
-        id,
-        title: post.title,
-        content: post.content
-      });
-      navigate('/dashboard/posts');
+      await updatePost(id, post);
+      navigate('/');
     } catch (err) {
       setError('Failed to save post');
+      console.error(err);
     } finally {
       setLoading(false);
     }
   }
 
   if (loading) {
-    return <div className={styles.loading}>Loading...</div>;
+    return <div className={styles.loading}>Loading editor...</div>;
   }
 
   return (
     <div className={styles.editor}>
+      <h1 className={styles.title}>{id ? 'Edit Post' : 'New Post'}</h1>
+      {error && <div className={styles.error}>{error}</div>}
       <form onSubmit={handleSubmit} className={styles.form}>
-        <h1>{id ? 'Edit Post' : 'New Post'}</h1>
-        {error && <div className={styles.error}>{error}</div>}
-        
         <div className={styles.formGroup}>
           <label htmlFor="title">Title</label>
           <input
@@ -71,7 +68,6 @@ function DashboardEditor() {
             required
           />
         </div>
-
         <div className={styles.formGroup}>
           <label htmlFor="content">Content</label>
           <textarea
@@ -79,21 +75,19 @@ function DashboardEditor() {
             value={post.content}
             onChange={(e) => setPost({ ...post, content: e.target.value })}
             required
-            rows={10}
           />
         </div>
-
-        <div className={styles.actions}>
-          <button type="button" onClick={() => navigate('/dashboard/posts')}>
-            Cancel
-          </button>
-          <button type="submit" disabled={loading}>
-            {loading ? 'Saving...' : 'Save'}
-          </button>
-        </div>
+        <button type="submit" className={styles.saveButton}>
+          Save Post
+        </button>
+        <button
+          type="button"
+          onClick={() => navigate('/')}
+          className={styles.cancelButton}
+        >
+          Cancel
+        </button>
       </form>
     </div>
   );
-}
-
-export default DashboardEditor; 
+} 

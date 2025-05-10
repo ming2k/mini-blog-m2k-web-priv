@@ -1,21 +1,21 @@
-# Mini Blog M2K Web
+# Mini Blog M2K Admin Web
 
-A high-performance React web application for blogging, built with modern best practices.
+A high-performance React admin interface for Mini Blog M2K, separated from the main user-facing blog application.
 
 ## Features
 
 - ⚡️ Lightning-fast performance with Vite
 - 🔄 Code splitting and lazy loading
-- 📱 Responsive design
+- 📱 Responsive admin dashboard
 - 🧩 Component-based architecture
-- 🔍 SEO-friendly
+- 🔍 SEO-friendly (where applicable)
 - 📊 Performance monitoring with Web Vitals
 - 🖼️ Optimized image loading
 - 📋 Virtualized lists for handling large datasets
 - 🔄 Efficient state management with Zustand
 - 📡 Smart data fetching with SWR
-- 📝 Markdown support with GitHub Flavored Markdown
-- ➗ Mathematical equations with KaTeX
+- 📝 Markdown support for admin notes
+- ➗ Mathematical equations with KaTeX (if needed)
 
 ## Getting Started
 

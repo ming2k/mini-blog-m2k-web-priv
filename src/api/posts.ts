@@ -1,4 +1,4 @@
-import { API_BASE_URL, authHeaders } from './config';
+import { api } from './api';
 
 export interface Post {
   id: string;
@@ -8,21 +8,22 @@ export interface Post {
   created_at: string;
   updated_at: string;
   author_id: string;
-  author?: {
-    username: string;
-  };
 }
 
-export interface PaginationData {
-  current_page: number;
-  per_page: number;
-  total_posts: number;
-  total_pages: number;
+export interface CreatePostRequest {
+  title: string;
+  content: string;
 }
 
-export interface PostsResponse {
-  posts: Post[];
-  pagination: PaginationData;
+export interface UpdatePostRequest {
+  title?: string;
+  content?: string;
+}
+
+export interface SearchParams {
+  q: string;
+  page?: number;
+  per_page?: number;
 }
 
 export interface PostEditorData {
@@ -31,104 +32,39 @@ export interface PostEditorData {
   content: string;
 }
 
-export async function getPosts(page: number = 1, per_page: number = 5): Promise<PostsResponse> {
-  const response = await fetch(
-    `${API_BASE_URL}/posts?page=${page}&per_page=${per_page}`
-  );
+export const getPosts = async (page?: number, per_page?: number): Promise<Post[]> => {
+  const response = await api.get('/api/posts', { page, per_page });
+  return response;
+};
 
-  if (!response.ok) {
-    throw new Error('Failed to fetch posts');
+export const getPost = async (id: string): Promise<Post> => {
+  const response = await api.get(`/api/posts/${id}`);
+  return response;
+};
+
+export const createPost = async (data: CreatePostRequest): Promise<Post> => {
+  const response = await api.post('/api/posts', data);
+  return response;
+};
+
+export const updatePost = async (id: string, data: UpdatePostRequest): Promise<Post> => {
+  const response = await api.put(`/api/posts/${id}`, data);
+  return response;
+};
+
+export const deletePost = async (id: string): Promise<void> => {
+  await api.delete(`/api/posts/${id}`);
+};
+
+export const searchPosts = async (params: SearchParams): Promise<Post[]> => {
+  const response = await api.get('/api/posts/search', params);
+  return response;
+};
+
+export const savePost = async (data: PostEditorData): Promise<Post> => {
+  if (data.id) {
+    return updatePost(data.id, { title: data.title, content: data.content });
+  } else {
+    return createPost({ title: data.title, content: data.content });
   }
-
-  return response.json();
-}
-
-export async function searchPosts(query: string, page: number = 1, per_page: number = 10): Promise<PostsResponse> {
-  const response = await fetch(
-    `${API_BASE_URL}/posts/search?q=${encodeURIComponent(query)}&page=${page}&per_page=${per_page}`
-  );
-
-  if (!response.ok) {
-    throw new Error('Failed to search posts');
-  }
-
-  return response.json();
-}
-
-export async function createPost(data: { title: string; content: string }): Promise<Post> {
-  const response = await fetch(`${API_BASE_URL}/posts`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${localStorage.getItem('token')}`
-    },
-    body: JSON.stringify(data)
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to create post');
-  }
-
-  return response.json();
-}
-
-export async function updatePost(id: string, data: { title?: string; content?: string }): Promise<Post> {
-  const response = await fetch(`${API_BASE_URL}/posts/${id}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${localStorage.getItem('token')}`
-    },
-    body: JSON.stringify(data)
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to update post');
-  }
-
-  return response.json();
-}
-
-export async function deletePost(id: string): Promise<void> {
-  const response = await fetch(`${API_BASE_URL}/posts/${id}`, {
-    method: 'DELETE',
-    headers: {
-      'Authorization': `Bearer ${localStorage.getItem('token')}`
-    }
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to delete post');
-  }
-}
-
-export async function getPost(id: string): Promise<Post> {
-  const response = await fetch(`${API_BASE_URL}/posts/${id}`);
-  
-  if (!response.ok) {
-    throw new Error('Failed to fetch post');
-  }
-
-  return response.json();
-}
-
-export async function savePost(data: PostEditorData): Promise<Post> {
-  const url = data.id 
-    ? `${API_BASE_URL}/posts/${data.id}`
-    : `${API_BASE_URL}/posts`;
-    
-  const response = await fetch(url, {
-    method: data.id ? 'PUT' : 'POST',
-    headers: authHeaders(localStorage.getItem('token') || ''),
-    body: JSON.stringify({
-      title: data.title,
-      content: data.content
-    })
-  });
-  
-  if (!response.ok) {
-    throw new Error(`Failed to ${data.id ? 'update' : 'create'} post`);
-  }
-
-  return response.json();
-} 
+}; 

@@ -1,0 +1,96 @@
+.settings {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.settingsHeader {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.settingsHeader h1 {
+  font-size: 2rem;
+  color: var(--text-color);
+  margin: 0;
+}
+
+.settingsContent {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  font-size: 1.2rem;
+  color: var(--accent-color);
+}
+
+.settingsForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.formGroup label {
+  font-size: 0.9rem;
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.formGroup input,
+.formGroup textarea {
+  padding: 0.75rem;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  color: var(--text-color);
+  background: #f8f9fa;
+  transition: all 0.2s ease;
+}
+
+.formGroup input:focus,
+.formGroup textarea:focus {
+  outline: none;
+  background: white;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px rgba(85, 85, 85, 0.1);
+}
+
+.saveButton {
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.saveButton:hover {
+  background: var(--accent-color-dark);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+  .settings {
+    padding: 1rem;
+  }
+  
+  .settingsContent {
+    padding: 1.5rem;
+  }
+} 
