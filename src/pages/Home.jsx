@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import styles from './Home.module.css';
-import MemoCard from '../components/MemoCard';
+import PostCard from '../components/PostCard';
+import PostInput from '../components/PostInput';
+import Calendar from '../components/Calendar';
 import { FaHashtag, FaPaperclip, FaLock } from 'react-icons/fa';
 
 export default function Home() {
   const [input, setInput] = useState('');
+  const [isExpanded, setIsExpanded] = useState(false);
   // Placeholder for memos
   const [memos, setMemos] = useState([
     // Example memos for now
@@ -56,30 +59,47 @@ export default function Home() {
   };
 
   return (
-    <div className={styles.mainContent}>
-      {/* Input Bar */}
-      <div className={styles.inputBar}>
-        <input
-          type="text"
-          className={styles.input}
-          placeholder="Any thoughts..."
-          value={input}
-          onChange={handleInputChange}
-        />
-        {/* Icons and Save button */}
-        <div className={styles.inputActions}>
-          <FaHashtag className={styles.inputIcon} title="Add tag" />
-          <FaPaperclip className={styles.inputIcon} title="Attach file" />
-          <FaLock className={styles.inputIcon} title="Private" />
-          <button className={styles.saveButton} onClick={handleSave}>Save</button>
+    <div className={styles.pageLayout}>
+      <aside className={styles.sidebar}>
+        <div className={styles.sidebarContent}>
+          {/* Search Bar */}
+          <input
+            type="text"
+            className={styles.searchBar}
+            placeholder="Search memos..."
+          />
+          {/* Calendar (static for now) */}
+          <Calendar />
+          {/* Shortcuts */}
+          <div className={styles.shortcutsSection}>
+            <div className={styles.sectionTitle}>Shortcuts</div>
+            <ul className={styles.shortcutsList}>
+              <li>Links</li>
+              <li>To-do</li>
+              <li>Code</li>
+            </ul>
+          </div>
+          {/* Tags */}
+          <div className={styles.tagsSection}>
+            <div className={styles.sectionTitle}>Tags</div>
+            <div className={styles.tagsList}>
+              <span className={styles.tag}>#features</span>
+              <span className={styles.tag}>#hello</span>
+              <span className={styles.tag}>#todo</span>
+            </div>
+          </div>
         </div>
-      </div>
-      {/* Memo List */}
-      <div className={styles.memoList}>
-        {memos.map(memo => (
-          <MemoCard key={memo.id} memo={memo} referencedMemos={memos} />
-        ))}
-      </div>
+      </aside>
+      <main className={styles.mainContent}>
+        {/* Input Bar */}
+        <PostInput onSave={handleSave} />
+        {/* Memo List */}
+        <div className={styles.memoList}>
+          {memos.map(memo => (
+            <PostCard key={memo.id} memo={memo} referencedMemos={memos} />
+          ))}
+        </div>
+      </main>
     </div>
   );
 } 

@@ -1,0 +1,158 @@
+:root {
+  --card-bg: #fff;
+  --card-text: #222;
+  --card-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  --card-border: #e0e0e0;
+  --tag-bg: #e0e7ef;
+  --tag-text: #3b4a5a;
+  --checked-text: #b0b0b0;
+  --reference-bg: #f5f5f5;
+  --reference-label: #888;
+  --reference-content: #555;
+}
+[data-theme='dark'] {
+  --card-bg: #23272f;
+  --card-text: #f3f4f6;
+  --card-shadow: 0 2px 8px rgba(0,0,0,0.32);
+  --card-border: #333a44;
+  --tag-bg: #2d3748;
+  --tag-text: #cbd5e1;
+  --checked-text: #6b7280;
+  --reference-bg: #23272f;
+  --reference-label: #a0aec0;
+  --reference-content: #cbd5e1;
+}
+[data-theme='light'] {
+  --card-bg: #fff;
+  --card-text: #222;
+  --card-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  --card-border: #e0e0e0;
+  --tag-bg: #e0e7ef;
+  --tag-text: #3b4a5a;
+  --checked-text: #b0b0b0;
+  --reference-bg: #f5f5f5;
+  --reference-label: #888;
+  --reference-content: #555;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']):not([data-theme='dark']) {
+    --card-bg: #23272f;
+    --card-text: #f3f4f6;
+    --card-shadow: 0 2px 8px rgba(0,0,0,0.32);
+    --card-border: #333a44;
+    --tag-bg: #2d3748;
+    --tag-text: #cbd5e1;
+    --checked-text: #6b7280;
+    --reference-bg: #23272f;
+    --reference-label: #a0aec0;
+    --reference-content: #cbd5e1;
+  }
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: 10px;
+  box-shadow: var(--card-shadow);
+  padding: 1.2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  font-size: 1.05rem;
+  color: var(--card-text);
+  position: relative;
+  border: 1px solid var(--card-border);
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.2rem;
+}
+.timestamp {
+  font-size: 0.92rem;
+  color: var(--checked-text);
+}
+.menuButton {
+  background: none;
+  border: none;
+  color: var(--checked-text);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+.menuButton:hover {
+  background: var(--tag-bg);
+}
+
+.content {
+  font-size: 1.08rem;
+  color: var(--card-text);
+  word-break: break-word;
+}
+
+.checklist {
+  list-style: none;
+  padding: 0;
+  margin: 0.2rem 0 0.2rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.checkItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+}
+.checked {
+  text-decoration: line-through;
+  color: var(--checked-text);
+}
+
+.tags {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+.tag {
+  background: var(--tag-bg);
+  color: var(--tag-text);
+  border-radius: 6px;
+  padding: 0.15rem 0.7rem;
+  font-size: 0.92rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.tag:hover {
+  background: #4f8cff;
+  color: #fff;
+}
+
+.references {
+  margin-top: 0.3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.referencePreview {
+  background: var(--reference-bg);
+  border-radius: 6px;
+  padding: 0.4rem 0.7rem;
+  font-size: 0.97rem;
+  color: var(--reference-content);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.referenceLabel {
+  font-weight: 600;
+  color: var(--reference-label);
+}
+.referenceContent {
+  color: var(--reference-content);
+} 

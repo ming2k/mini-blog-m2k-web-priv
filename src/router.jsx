@@ -5,12 +5,12 @@ import RootLayout from './layouts/RootLayout';
 import AuthLayout from './layouts/AuthLayout';
 import App from "./App";
 import Home from "./pages/Home";
-import Posts from "./pages/Posts";
 import Editor from "./pages/Editor";
 import Settings from "./pages/Settings";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Account from "./pages/Account";
+import Profile from "./pages/Profile";
 
 // Lazy load components
 const LazyEditPost = lazy(() => import('./pages/EditPost'));
@@ -50,10 +50,6 @@ export const router = createBrowserRouter([
             element: <Home />
           },
           {
-            path: "/posts",
-            element: <Posts />
-          },
-          {
             path: "/editor",
             element: <Editor />
           },
@@ -64,6 +60,10 @@ export const router = createBrowserRouter([
           {
             path: "/account",
             element: <Account />
+          },
+          {
+            path: "/:username",
+            element: <Profile />
           },
           {
             path: "/posts/:id/edit",

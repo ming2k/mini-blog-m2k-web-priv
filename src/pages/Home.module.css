@@ -1,7 +1,7 @@
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0;
 }
 
 .title {
@@ -65,92 +65,398 @@
   .container {
     padding: 1rem;
   }
-  
   .stats {
     grid-template-columns: 1fr;
   }
+  .mainContent {
+    max-width: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 1rem 0.5rem 1rem 0.5rem;
+    box-sizing: border-box;
+  }
+  .inputBar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    padding: 0.7rem 0.7rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .input {
+    width: 100%;
+    min-width: 0;
+    font-size: 1rem;
+  }
+
+  .inputActions {
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: flex-end;
+    gap: 0.3rem;
+  }
+  .inputIcon, .saveButton {
+    font-size: 1rem;
+    padding: 0.4rem 0.7rem;
+  }
+  .memoList {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .memoCard {
+    width: 100%;
+    box-sizing: border-box;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 }
 
-.mainContent {
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 2.5rem 1.5rem 1.5rem 1.5rem;
+.pageLayout {
+  display: grid;
+  grid-template-columns: minmax(200px, 320px) 1fr;
+  height: 100vh;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.sidebar {
+  width: auto;
+  min-width: 200px;
+  max-width: 320px;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  box-sizing: border-box;
+  height: 100vh;
+  z-index: 1;
 }
 
-.inputBar {
+.sidebarContent {
   display: flex;
-  align-items: center;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-  padding: 1rem 1.5rem;
-  gap: 1rem;
+  flex-direction: column;
+  height: 100%;
+  padding: 1.5rem 1rem;
+  gap: 1.5rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  color: var(--text);
 }
 
-.input {
-  flex: 1;
-  border: none;
-  background: transparent;
-  font-size: 1.1rem;
+.searchBar {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  font-size: 0.95rem;
   outline: none;
-  color: #333;
+  transition: border 0.2s;
+  color: var(--text);
 }
 
-.input::placeholder {
-  color: #bbb;
+.searchBar:focus {
+  border-color: var(--accent);
 }
 
-.inputActions {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+.calendarSection {
+  background: var(--bg);
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
 }
 
-.inputIcon {
-  color: #b0b0b0;
-  font-size: 1.1rem;
-  margin-right: 0.2rem;
+.calendarHeader {
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 0.75rem;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.calendarTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.calendarTable th, 
+.calendarTable td {
+  text-align: center;
+  padding: 0.3rem;
+  border-radius: 4px;
+  color: var(--text);
+}
+
+.calendarTable td:not(:empty):hover {
+  background: var(--hover-bg);
   cursor: pointer;
-  transition: color 0.2s;
 }
 
-.inputIcon:hover {
-  color: #4f8cff;
+.shortcutsSection {
+  margin-bottom: 0.5rem;
 }
 
-.saveButton {
-  background: #4f8cff;
-  color: #fff;
-  border: none;
+.sectionTitle {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.shortcutsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.shortcutsList li {
+  padding: 0.5rem 0.75rem;
   border-radius: 6px;
-  padding: 0.5rem 1.2rem;
-  font-size: 1rem;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.2s;
+  font-size: 0.9rem;
+}
+
+.shortcutsList li:hover {
+  background: var(--hover-bg);
+}
+
+.tagsSection {
+  margin-bottom: 0.5rem;
+}
+
+.tagsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.tag {
+  background: var(--tag-bg);
+  color: var(--text);
+  border-radius: 6px;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.85rem;
   font-weight: 500;
   cursor: pointer;
   transition: background 0.2s;
 }
 
-.saveButton:hover {
-  background: #2563eb;
+.tag:hover {
+  background: var(--hover-bg);
+}
+
+.mainContent {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  background: var(--bg);
+  color: var(--text);
+  box-sizing: border-box;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Input Bar (collapsed) */
+.inputBar {
+  display: flex;
+  align-items: center;
+  background: var(--sidebar-bg);
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  padding: 0.7rem 1.2rem;
+  gap: 0.7rem;
+  transition: box-shadow 0.2s, border-radius 0.2s, background 0.2s, min-height 0.2s;
+  min-height: 48px;
+  cursor: text;
+  position: relative;
+}
+
+.inputBarExpanded {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  background: var(--sidebar-bg);
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+  padding: 1.2rem 1.2rem 0.7rem 1.2rem;
+  gap: 0.7rem;
+  min-height: 120px;
+  transition: box-shadow 0.2s, border-radius 0.2s, background 0.2s, min-height 0.2s;
+  cursor: text;
+  position: relative;
+}
+
+.replySettings {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 0.5rem;
+}
+
+.replyButton {
+  background: transparent;
+  border: 1.5px solid var(--accent);
+  color: var(--accent);
+  border-radius: 999px;
+  padding: 0.2rem 1.1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.replyButton:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+.replyInfo {
+  color: var(--accent);
+  font-size: 0.98rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+.inputBar input.input {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 1.1rem;
+  color: var(--text);
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  transition: font-size 0.2s;
+}
+
+.inputBarExpanded input.input {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 1.2rem;
+  color: var(--text);
+  flex: 1;
+  min-width: 0;
+  padding: 0.2rem 0;
+}
+
+.inputBar .inputActions {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-left: 0.5rem;
+}
+.inputBarExpanded .inputActions {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-top: 0.7rem;
+  margin-left: 0;
+  border-top: 1px solid var(--border);
+  padding-top: 0.7rem;
+}
+
+.inputIcon {
+  color: var(--accent);
+  font-size: 1.2rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0.3rem;
+  border-radius: 6px;
+  transition: background 0.2s, color 0.2s;
+}
+.inputIcon:hover {
+  background: var(--hover-bg);
+  color: var(--accent-hover);
+}
+
+.saveButton {
+  background: #888;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 0.4rem 1.3rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.saveButton:enabled {
+  background: var(--accent);
+}
+.saveButton:disabled {
+  background: #888;
+  cursor: not-allowed;
 }
 
 .memoList {
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
+  gap: 1rem;
 }
 
 .memoCard {
-  background: #fff;
+  background: var(--sidebar-bg);
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
   padding: 1.2rem 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  font-size: 1.05rem;
-  color: #222;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+@media (max-width: 768px) {
+  .pageLayout {
+    display: block;
+    height: auto;
+  }
+  
+  .sidebar {
+    display: none;
+  }
+  
+  .mainContent {
+    max-width: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 1rem 1rem 5rem 1rem;
+    box-sizing: border-box;
+    min-height: calc(100vh - 70px);
+    height: auto;
+  }
+
+  .inputBar, .inputBarExpanded {
+    padding: 0.7rem 0.7rem;
+    min-height: 44px;
+  }
+
+  .inputBarExpanded {
+    min-height: 100px;
+    padding: 1rem 0.7rem 0.7rem 0.7rem;
+  }
+
+  .replyButton {
+    font-size: 0.95rem;
+    padding: 0.15rem 0.8rem;
+  }
+
+  .saveButton {
+    font-size: 0.95rem;
+    padding: 0.35rem 1rem;
+  }
 } 

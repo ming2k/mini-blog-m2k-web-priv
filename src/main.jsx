@@ -4,10 +4,13 @@ import { RouterProvider } from 'react-router-dom';
 import { router } from './router';
 import './index.css'; // Create this file for basic styling
 import { reportWebVitals } from './utils/webVitals';
+import { ThemeProvider } from './store/ThemeContext';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <ThemeProvider>
+      <RouterProvider router={router} />
+    </ThemeProvider>
   </React.StrictMode>
 );
 

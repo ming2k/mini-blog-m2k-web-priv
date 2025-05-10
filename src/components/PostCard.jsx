@@ -1,8 +1,8 @@
 import React from 'react';
-import styles from './MemoCard.module.css';
+import styles from './PostCard.module.css';
 import { FaEllipsisV } from 'react-icons/fa';
 
-export default function MemoCard({ memo, referencedMemos = [] }) {
+export default function PostCard({ memo, referencedMemos = [] }) {
   return (
     <div className={styles.card}>
       <div className={styles.header}>
